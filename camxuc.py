@@ -1,0 +1,81 @@
+import time
+import board
+import adafruit_ssd1306
+from PIL import Image, ImageDraw
+
+# Định nghĩa kích thước màn hình
+WIDTH = 128
+HEIGHT = 64  # Đối với màn hình 128x64
+EYE_WIDTH = 30
+EYE_HEIGHT = 40
+EYE_SPACING = 20
+EYE_Y = HEIGHT // 2 - EYE_HEIGHT // 2
+RADIUS = 10  # Bo góc mắt
+
+# Tạo đối tượng I2C
+i2c = board.I2C()
+
+# Tạo đối tượng màn hình OLED
+oled = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c)
+
+def draw_rounded_rectangle(draw, xy, radius, outline=None, fill=None):
+    x0, y0, x1, y1 = xy
+    draw.rectangle([x0 + radius, y0, x1 - radius, y1], outline=outline, fill=fill)
+    draw.rectangle([x0, y0 + radius, x1, y1 - radius], outline=outline, fill=fill)
+    draw.pieslice([x0, y0, x0 + 2 * radius, y0 + 2 * radius], 180, 270, outline=outline, fill=fill)
+    draw.pieslice([x1 - 2 * radius, y0, x1, y0 + 2 * radius], 270, 360, outline=outline, fill=fill)
+    draw.pieslice([x0, y1 - 2 * radius, x0 + 2 * radius, y1], 90, 180, outline=outline, fill=fill)
+    draw.pieslice([x1 - 2 * radius, y1 - 2 * radius, x1, y1], 0, 90, outline=outline, fill=fill)
+
+def draw_eyes(draw, left_x, right_x, eye_state, emotion, radius=10):
+    # Xóa hình ảnh bằng cách vẽ hình chữ nhật đen
+    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
+
+    if eye_state == 'open':
+        if emotion == 'happy':
+            draw_rounded_rectangle(draw, (left_x, EYE_Y, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+            draw_rounded_rectangle(draw, (right_x, EYE_Y, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+        elif emotion == 'sad':
+            draw.arc((left_x, EYE_Y + EYE_HEIGHT // 2, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), 0, 180, fill=255)
+            draw.arc((right_x, EYE_Y + EYE_HEIGHT // 2, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), 0, 180, fill=255)
+        elif emotion == 'crying':
+            draw_rounded_rectangle(draw, (left_x, EYE_Y, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+            draw_rounded_rectangle(draw, (right_x, EYE_Y, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+            draw.line((left_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT, left_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT + 10), fill=255)
+            draw.line((right_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT, right_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT + 10), fill=255)
+    elif eye_state == 'closed':
+        draw.rectangle((left_x, EYE_Y + EYE_HEIGHT // 2 - 5, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT // 2 + 5), outline=255, fill=255)
+        draw.rectangle((right_x, EYE_Y + EYE_HEIGHT // 2 - 5, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT // 2 + 5), outline=255, fill=255)
+
+def main():
+    left_eye_x = WIDTH // 4 - EYE_WIDTH // 2
+    right_eye_x = 3 * WIDTH // 4 - EYE_WIDTH // 2
+
+    image = Image.new('1', (oled.width, oled.height))
+    draw = ImageDraw.Draw(image)
+
+    while True:
+        # Chớp mắt với cảm xúc vui
+        for emotion in ['happy', 'sad', 'crying']:
+            draw_eyes(draw, left_eye_x, right_eye_x, 'open', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(1)
+
+            draw_eyes(draw, left_eye_x, right_eye_x, 'closed', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(0.2)
+
+            draw_eyes(draw, left_eye_x, right_eye_x, 'open', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(1)
+
+            draw_eyes(draw, left_eye_x, right_eye_x, 'closed', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(0.2)
+
+if __name__ == "__main__":
+    main()
