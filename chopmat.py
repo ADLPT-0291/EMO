@@ -58,7 +58,7 @@ def main():
         draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
         oled.image(image)
         oled.show()
-        time.sleep(0.2)
+        time.sleep(0.5)
         
         draw_eyes(draw, left_eye_x, right_eye_x, 'open')
         oled.image(image)
@@ -67,29 +67,30 @@ def main():
         draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
         oled.image(image)
         oled.show()
-        time.sleep(0.2)
+        time.sleep(0.5)
         
         # Di chuyển mắt qua trái
-        for i in range(5):
+        for i in range(10):
             draw_eyes(draw, left_eye_x - i * 2, right_eye_x - i * 2, 'open')
             oled.image(image)
             oled.show()
-            time.sleep(0.05)
+            time.sleep(1)
 
+        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
+        oled.image(image)
+        oled.show()
+        time.sleep(0.2)
         
+        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
+        oled.image(image)
+        oled.show()
+        time.sleep(1)
         # Di chuyển mắt qua phải
-        for i in range(5):
+        for i in range(10):
             draw_eyes(draw, left_eye_x - 20 + i * 2, right_eye_x - 20 + i * 2, 'open')
             oled.image(image)
             oled.show()
-            time.sleep(0.05)
-        
-                # Chớp mắt
-        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
-        oled.image(image)
-        oled.show()
-        time.sleep(1)
-        
+            time.sleep(1)
         draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
         oled.image(image)
         oled.show()
@@ -99,25 +100,39 @@ def main():
         oled.image(image)
         oled.show()
         time.sleep(1)
-        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
-        oled.image(image)
-        oled.show()
-        time.sleep(0.2)
+
                 
         # Di chuyển mắt qua phải
-        for i in range(5):
+        for i in range(10):
             draw_eyes(draw, left_eye_x - 20 + i * 2, right_eye_x - 20 + i * 2, 'open')
             oled.image(image)
             oled.show()
             time.sleep(0.05)
-            
+        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
+        oled.image(image)
+        oled.show()
+        time.sleep(0.2)
+        
+        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
+        oled.image(image)
+        oled.show()
+        time.sleep(1)
                 
         # Di chuyển mắt qua trái
-        for i in range(5):
+        for i in range(10):
             draw_eyes(draw, left_eye_x - i * 2, right_eye_x - i * 2, 'open')
             oled.image(image)
             oled.show()
             time.sleep(0.05)
+                draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
+        oled.image(image)
+        oled.show()
+        time.sleep(0.2)
+        
+        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
+        oled.image(image)
+        oled.show()
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
