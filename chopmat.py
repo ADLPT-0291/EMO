@@ -69,6 +69,25 @@ def main():
 
     while True:
     # Chớp mắt với cảm xúc vui
+        # Chớp mắt
+        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
+        oled.image(image)
+        oled.show()
+        time.sleep(1)
+        
+        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
+        oled.image(image)
+        oled.show()
+        time.sleep(0.5)
+        
+        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
+        oled.image(image)
+        oled.show()
+        time.sleep(1)
+        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
+        oled.image(image)
+        oled.show()
+        time.sleep(0.5)
         for emotion in ['happy', 'sad', 'crying']:
             draw_eyes(draw, left_eye_x, right_eye_x, 'open', emotion)
             oled.image(image)
@@ -89,25 +108,6 @@ def main():
             oled.image(image)
             oled.show()
             time.sleep(0.2)
-        # Chớp mắt
-        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
-        oled.image(image)
-        oled.show()
-        time.sleep(1)
-        
-        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
-        oled.image(image)
-        oled.show()
-        time.sleep(0.5)
-        
-        draw_eyes(draw, left_eye_x, right_eye_x, 'open')
-        oled.image(image)
-        oled.show()
-        time.sleep(1)
-        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
-        oled.image(image)
-        oled.show()
-        time.sleep(0.5)
         
         # Di chuyển mắt qua trái
         for i in range(10):
