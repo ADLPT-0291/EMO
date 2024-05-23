@@ -120,16 +120,16 @@ def main():
                 
         # Di chuyển mắt qua trái
         for i in range(10):
-            draw_eyes(draw, left_eye_x + 22 - i, right_eye_x + 22 - i, 'open')
+            draw_eyes(draw, left_eye_x + 19 - i, right_eye_x + 19 - i, 'open')
             oled.image(image)
             oled.show()
             time.sleep(0.05)
-        draw_eyes(draw, draw, left_eye_x + 22 - i, right_eye_x + 22 - i, 'closed')
+        draw_eyes(draw, draw, left_eye_x + 19 - i, right_eye_x + 19 - i, 'closed')
         oled.image(image)
         oled.show()
         time.sleep(0.2)
         
-        draw_eyes(draw, left_eye_x + 22 - i, right_eye_x + 22 - i, 'open')
+        draw_eyes(draw, left_eye_x + 19 - i, right_eye_x + 19 - i, 'open')
         oled.image(image)
         oled.show()
         time.sleep(1)
