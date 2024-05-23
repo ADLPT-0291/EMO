@@ -10,7 +10,7 @@ EYE_WIDTH = 30
 EYE_HEIGHT = 40
 EYE_SPACING = 20
 EYE_Y = HEIGHT // 2 - EYE_HEIGHT // 2
-
+RADIUS = 10  # Bo góc mắt
 # Tạo đối tượng I2C
 i2c = board.I2C()
 
@@ -40,6 +40,25 @@ def draw_eyes(draw, left_x, right_x, eye_state, radius=10):
         draw.rectangle((left_x, EYE_Y + EYE_HEIGHT // 2 - 5, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT // 2 + 5), outline=255, fill=255)
         # Vẽ mắt phải đóng
         draw.rectangle((right_x, EYE_Y + EYE_HEIGHT // 2 - 5, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT // 2 + 5), outline=255, fill=255)
+def draw_eyes(draw, left_x, right_x, eye_state, emotion, radius=10):
+    # Xóa hình ảnh bằng cách vẽ hình chữ nhật đen
+    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
+
+    if eye_state == 'open':
+        if emotion == 'happy':
+            draw_rounded_rectangle(draw, (left_x, EYE_Y, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+            draw_rounded_rectangle(draw, (right_x, EYE_Y, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+        elif emotion == 'sad':
+            draw.arc((left_x, EYE_Y + EYE_HEIGHT // 2, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), 0, 180, fill=255)
+            draw.arc((right_x, EYE_Y + EYE_HEIGHT // 2, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), 0, 180, fill=255)
+        elif emotion == 'crying':
+            draw_rounded_rectangle(draw, (left_x, EYE_Y, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+            draw_rounded_rectangle(draw, (right_x, EYE_Y, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT), radius, outline=255, fill=255)
+            draw.line((left_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT, left_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT + 10), fill=255)
+            draw.line((right_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT, right_x + EYE_WIDTH // 2, EYE_Y + EYE_HEIGHT + 10), fill=255)
+    elif eye_state == 'closed':
+        draw.rectangle((left_x, EYE_Y + EYE_HEIGHT // 2 - 5, left_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT // 2 + 5), outline=255, fill=255)
+        draw.rectangle((right_x, EYE_Y + EYE_HEIGHT // 2 - 5, right_x + EYE_WIDTH, EYE_Y + EYE_HEIGHT // 2 + 5), outline=255, fill=255)
 
 def main():
     left_eye_x = WIDTH // 4 - EYE_WIDTH // 2
@@ -49,6 +68,27 @@ def main():
     draw = ImageDraw.Draw(image)
 
     while True:
+    # Chớp mắt với cảm xúc vui
+        for emotion in ['happy', 'sad', 'crying']:
+            draw_eyes(draw, left_eye_x, right_eye_x, 'open', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(1)
+
+            draw_eyes(draw, left_eye_x, right_eye_x, 'closed', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(0.2)
+
+            draw_eyes(draw, left_eye_x, right_eye_x, 'open', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(1)
+
+            draw_eyes(draw, left_eye_x, right_eye_x, 'closed', emotion)
+            oled.image(image)
+            oled.show()
+            time.sleep(0.2)
         # Chớp mắt
         draw_eyes(draw, left_eye_x, right_eye_x, 'open')
         oled.image(image)
