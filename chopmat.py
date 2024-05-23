@@ -124,7 +124,7 @@ def main():
             oled.image(image)
             oled.show()
             time.sleep(0.05)
-                draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
+        draw_eyes(draw, left_eye_x, right_eye_x, 'closed')
         oled.image(image)
         oled.show()
         time.sleep(0.2)
